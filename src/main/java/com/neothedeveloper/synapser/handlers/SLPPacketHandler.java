@@ -4,15 +4,11 @@ import com.google.gson.JsonObject;
 import com.neothedeveloper.synapser.Synapser;
 import com.neothedeveloper.synapser.builders.OutboundPacketBuilder;
 import com.neothedeveloper.synapser.datatypes.ClientState;
-import com.neothedeveloper.synapser.datatypes.LogType;
-import com.neothedeveloper.synapser.datatypes.VarIntLong;
 import com.neothedeveloper.synapser.decoders.InboundPacketDecoder;
 import com.neothedeveloper.synapser.server.PlayerSocket;
-import com.neothedeveloper.synapser.utils.ByteManipulation;
-import com.neothedeveloper.synapser.utils.Logger;
 
-public class StatusPacketHandler extends PacketHandler {
-    public StatusPacketHandler() {
+public class SLPPacketHandler extends PacketHandler {
+    public SLPPacketHandler() {
         super(ClientState.STATUS);
     }
     @Override
