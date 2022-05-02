@@ -1,30 +1,28 @@
 package com.neothedeveloper.synapser.decoders;
 
 import com.neothedeveloper.synapser.datatypes.VarIntLong;
+import com.neothedeveloper.synapser.utils.LongUtils;
 
 public class InboundPacketDecoder {
     private final int m_length;
-    private final byte m_packetID;
+    private final int m_packetID;
     private byte[] m_data;
     private final byte[] m_packetData;
     public InboundPacketDecoder(byte[] data) {
-        this.m_length = VarIntLong.ReadVarInt(data);
-        this.m_packetID = data[VarIntLong.CreateVarInt(this.m_length).length];
         this.m_packetData = data;
-        this.m_data = new byte[data.length - 2];
-        for (int i = 2; i < data.length; i++) {
-            this.m_data[i - 2] = data[i];
-        }
+        this.m_data = data;
+        this.m_length = GetFieldVarInt();
+        this.m_packetID = GetFieldVarInt();
     }
     private void removeUsedBits(int amount) {
         if (m_data.length - amount < 0) throw new RuntimeException("Packet data removal amount too big");
         byte[] newBytes = new byte[m_data.length - amount];
-        for (int i = amount; i < m_data.length; i++) {
-            newBytes[i - amount] = this.m_data[i];
-        }
+        if (m_data.length - amount >= 0)
+            System.arraycopy(this.m_data, amount, newBytes, 0, m_data.length - amount);
         this.m_data = newBytes;
     }
-    public byte PacketID() { return this.m_packetID; }
+    public boolean HasFields() { return this.m_data.length > 0; }
+    public int PacketID() { return this.m_packetID; }
     public int PacketLength() { return this.m_length; }
     public byte[] RawPacketData() { return this.m_packetData; }
     public byte[] PacketData() {
@@ -43,6 +41,12 @@ public class InboundPacketDecoder {
         }
         removeUsedBits(length);
         return out.toString();
+    }
+    public long GetFieldLong() {
+        byte[] longBytes = new byte[Long.BYTES];
+        System.arraycopy(this.m_data, 0, longBytes, 0, Long.BYTES);
+        removeUsedBits(Long.BYTES);
+        return LongUtils.GetLongFromBytes(longBytes);
     }
 
     public int GetFieldUnsignedShort() {

@@ -6,5 +6,5 @@ public enum LogType {
     ERROR,
     EVENT,
     VERBOSE,
-    VERBOSE_DEBUG
+    PACKET_EVENT,
 }

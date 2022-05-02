@@ -1,46 +1,47 @@
 package com.neothedeveloper.synapser.server;
 
+import com.neothedeveloper.synapser.datatypes.ClientState;
 import com.neothedeveloper.synapser.datatypes.LogType;
 import com.neothedeveloper.synapser.utils.Logger;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.channel.ChannelHandlerContext;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class PlayerSocket {
-    private Socket m_socket;
-    private OutputStream m_socketOutStream;
-    private InputStream m_socketInStream;
-    public PlayerSocket(Socket tcpSocket) throws IOException {
-        this.m_socket = tcpSocket;
-        this.m_socketOutStream = tcpSocket.getOutputStream();
-        this.m_socketInStream = tcpSocket.getInputStream();
-    }
+    private final ChannelHandlerContext m_context;
+    private ClientState m_state;
 
+    public PlayerSocket(ChannelHandlerContext context) {
+        this.m_context = context;
+        this.m_state = ClientState.HANDSHAKING;
+    }
+    ByteBuf out;
     public void Write(byte[] bytes) {
-        try {
-            this.m_socketOutStream.write(bytes);
-        } catch (IOException e) {
-            Logger.Log(LogType.ERROR, "Failed to write packet to player");
-            throw new RuntimeException(e);
-        }
+        out = ByteBufAllocator.DEFAULT.buffer();
+        out.writeBytes(bytes);
+        this.m_context.writeAndFlush(out);
     }
 
-    public byte[] Read() {
-        try {
-            return this.m_socketInStream.readAllBytes();
-        } catch (IOException e) {
-            Logger.Log(LogType.ERROR, "Failed to read packet from player");
-            throw new RuntimeException(e);
-        }
+    public void SetState(ClientState state) {
+        this.m_state = state;
+    }
+
+    public ClientState GetState() {
+        return this.m_state;
     }
 
     public boolean IsAlive() {
-        return this.m_socket.isConnected();
+        return this.m_context.channel().isOpen();
     }
 
-    public void Cloes() throws IOException {
-        this.m_socket.close();
+    public void Close() {
+        this.m_context.close();
     }
 }

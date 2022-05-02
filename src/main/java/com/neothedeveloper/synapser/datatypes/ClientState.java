@@ -1,12 +1,15 @@
 package com.neothedeveloper.synapser.datatypes;
 
 public enum ClientState {
-    NONE,
+    HANDSHAKING,
     STATUS,
     LOGIN,
     PLAY;
     public static ClientState fromInteger(int state) {
         switch (state) {
+            case 0 -> {
+                return HANDSHAKING;
+            }
             case 1 -> {
                 return STATUS;
             }
@@ -15,9 +18,6 @@ public enum ClientState {
             }
             case 3 -> {
                 return PLAY;
-            }
-            case 4 -> {
-                return NONE;
             }
         }
         return null;

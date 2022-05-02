@@ -1,19 +1,15 @@
 package com.neothedeveloper.synapser.handlers;
 
+import com.neothedeveloper.synapser.builders.OutboundPacketBuilder;
 import com.neothedeveloper.synapser.datatypes.ClientState;
 import com.neothedeveloper.synapser.decoders.InboundPacketDecoder;
 import com.neothedeveloper.synapser.server.PlayerSocket;
-
-public class PacketHandler {
-    private final ClientState m_runOnState;
-    public PacketHandler(ClientState state) {
-        this.m_runOnState = state;
+public class PingPacketHandler extends PacketHandler {
+    public PingPacketHandler() {
+        super(ClientState.STATUS);
     }
+    @Override
     public void handle(PlayerSocket socket, InboundPacketDecoder packet) {
-
-    }
-
-    public final ClientState allowedState() {
-        return m_runOnState;
+        socket.Write(new OutboundPacketBuilder((byte) 0x01).AddLongField(packet.GetFieldLong()).Build());
     }
 }

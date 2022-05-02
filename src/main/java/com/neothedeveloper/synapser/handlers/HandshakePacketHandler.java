@@ -1,32 +1,30 @@
 package com.neothedeveloper.synapser.handlers;
 
+import com.google.gson.JsonObject;
+import com.neothedeveloper.synapser.Synapser;
+import com.neothedeveloper.synapser.builders.OutboundPacketBuilder;
 import com.neothedeveloper.synapser.datatypes.ClientState;
 import com.neothedeveloper.synapser.datatypes.LogType;
 import com.neothedeveloper.synapser.datatypes.VarIntLong;
 import com.neothedeveloper.synapser.decoders.InboundPacketDecoder;
+import com.neothedeveloper.synapser.server.HandlerRegistry;
 import com.neothedeveloper.synapser.server.PlayerSocket;
+import com.neothedeveloper.synapser.utils.ByteManipulation;
 import com.neothedeveloper.synapser.utils.Logger;
 
-import static com.neothedeveloper.synapser.server.SynapserServer.GetState;
-import static com.neothedeveloper.synapser.server.SynapserServer.SetState;
+import java.util.Arrays;
 
 public class HandshakePacketHandler extends PacketHandler {
+    public HandshakePacketHandler() {
+        super(ClientState.HANDSHAKING);
+    }
     @Override
     public void handle(PlayerSocket socket, InboundPacketDecoder packet) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : packet.PacketData()) {
-            sb.append(String.format("0x%02X ", b));
-        }
-        Logger.Log(LogType.DEBUG, sb.toString());
-        sb = new StringBuilder();
-        for (byte b : VarIntLong.CreateVarInt(758)) {
-            sb.append(String.format("0x%02X ", b));
-        }
-        Logger.Log(LogType.DEBUG, sb.toString());
-        Logger.Log(LogType.DEBUG, String.format("Protocol Version: %d", packet.GetFieldVarInt()));
-        Logger.Log(LogType.DEBUG, String.format("Server Address: %s", packet.GetFieldString()));
-        Logger.Log(LogType.DEBUG, String.format("Server Port: %d", packet.GetFieldUnsignedShort()));
-        SetState(ClientState.fromInteger(packet.GetFieldVarInt()));
-        Logger.Log(LogType.DEBUG, String.format("Next State: %s", GetState().toString()));
+        int protocolVersion = packet.GetFieldVarInt();
+        String serverAddress = packet.GetFieldString();
+        int serverPort = packet.GetFieldUnsignedShort();
+        socket.SetState(ClientState.fromInteger(packet.GetFieldVarInt()));
+        InboundPacketDecoder leftOverPacket = new InboundPacketDecoder(packet.PacketData());
+        HandlerRegistry.runHandler(leftOverPacket.PacketID(), socket, leftOverPacket);
     }
 }
