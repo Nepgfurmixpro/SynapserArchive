@@ -37,5 +37,6 @@ public enum Component {
         if (String.valueOf(c).matches("[0123456789abcdef]")) {
             return Component.color;
         }
+        return Component.reset;
     }
 }

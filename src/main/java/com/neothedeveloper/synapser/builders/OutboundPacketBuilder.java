@@ -32,6 +32,9 @@ public class OutboundPacketBuilder {
     public OutboundPacketBuilder AddLongField(long fieldData) {
         return AddField(LongUtils.GetBytesFromLong(fieldData));
     }
+    public OutboundPacketBuilder AddVarIntField(int fieldData) {
+        return AddField(VarIntLong.CreateVarInt(fieldData));
+    }
 
     public byte[] Build() {
         List<Byte> output = new ArrayList<>();

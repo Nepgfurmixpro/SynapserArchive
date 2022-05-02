@@ -39,4 +39,5 @@ public enum Color {
     public static Color fromInteger(int i) {
         return map[i];
     }
+    public static Color fromChar(char c) { return fromInteger(Integer.parseInt(String.valueOf(c), 16)); }
 }

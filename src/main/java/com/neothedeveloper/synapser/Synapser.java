@@ -1,8 +1,8 @@
 package com.neothedeveloper.synapser;
 
+import com.neothedeveloper.latte.Latte;
 import com.neothedeveloper.synapser.exceptions.PropertyException;
-import com.neothedeveloper.synapser.minecraft.datatypes.Component;
-import com.neothedeveloper.synapser.minecraft.datatypes.ComponentValue;
+import com.neothedeveloper.synapser.minecraft.utils.ChatParser;
 import com.neothedeveloper.synapser.server.SynapserServer;
 import com.neothedeveloper.synapser.datatypes.LogType;
 import com.neothedeveloper.synapser.utils.Logger;
@@ -45,7 +45,7 @@ public class Synapser {
         if (!(Integer.parseInt(SERVER_PROPERTIES.GetProperty("max-players")) < Integer.MAX_VALUE))
             throw new PropertyException("max-players is invalid");
 
-
+        Latte.synapser().generateKeys();
         this.m_server = new SynapserServer(ip, SERVER_PROPERTIES.GetProperty("server-port"));
         try {
             this.m_server.run();

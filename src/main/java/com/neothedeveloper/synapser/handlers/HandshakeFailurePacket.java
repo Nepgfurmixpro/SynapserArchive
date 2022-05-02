@@ -6,16 +6,13 @@ import com.neothedeveloper.synapser.decoders.InboundPacketDecoder;
 import com.neothedeveloper.synapser.server.PlayerSocket;
 import com.neothedeveloper.synapser.utils.Logger;
 
-public class PacketHandler {
-    private final ClientState m_runOnState;
-    public PacketHandler(ClientState state) {
-        this.m_runOnState = state;
+public class HandshakeFailurePacket extends PacketHandler {
+    public HandshakeFailurePacket() {
+        super(ClientState.HANDSHAKING);
     }
+
+    @Override
     public void handle(PlayerSocket socket, InboundPacketDecoder packet) {
-
-    }
-
-    public final ClientState allowedState() {
-        return m_runOnState;
+        Logger.Log(LogType.ERROR, "Client failed to handshake.");
     }
 }

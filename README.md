@@ -11,4 +11,4 @@ If you would like to contribute please open an issue to explain what you would l
 If it is approved you can make a pull request to this repository, and it will be checked and tested.
 
 #### License
-[GNU General Public License](license.md)
+[MIT License](license.md)

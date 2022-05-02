@@ -3,6 +3,8 @@ package com.neothedeveloper.synapser.decoders;
 import com.neothedeveloper.synapser.datatypes.VarIntLong;
 import com.neothedeveloper.synapser.utils.LongUtils;
 
+import java.util.UUID;
+
 public class InboundPacketDecoder {
     private final int m_length;
     private final int m_packetID;
@@ -48,10 +50,21 @@ public class InboundPacketDecoder {
         removeUsedBits(Long.BYTES);
         return LongUtils.GetLongFromBytes(longBytes);
     }
-
     public int GetFieldUnsignedShort() {
         short out = (short)(this.m_data[0] << 8 | this.m_data[1] & 0xFF);
         removeUsedBits(2);
         return Short.toUnsignedInt(out);
+    }
+    public UUID GetFieldUUID() {
+        long high = GetFieldLong();
+        long low = GetFieldLong();
+        UUID uuid = new UUID(high, low);
+        return uuid;
+    }
+    public byte[] GetFieldByteArray(int length) {
+        byte[] bytes = new byte[length];
+        System.arraycopy(this.m_data, 0, bytes, 0, length);
+        removeUsedBits(length);
+        return bytes;
     }
 }

@@ -7,12 +7,14 @@ import com.neothedeveloper.synapser.datatypes.ClientState;
 import com.neothedeveloper.synapser.datatypes.LogType;
 import com.neothedeveloper.synapser.datatypes.VarIntLong;
 import com.neothedeveloper.synapser.decoders.InboundPacketDecoder;
+import com.neothedeveloper.synapser.outbound.LoginPacket;
 import com.neothedeveloper.synapser.server.HandlerRegistry;
 import com.neothedeveloper.synapser.server.PlayerSocket;
 import com.neothedeveloper.synapser.utils.ByteManipulation;
 import com.neothedeveloper.synapser.utils.Logger;
 
 import java.util.Arrays;
+import java.util.logging.Handler;
 
 public class HandshakePacketHandler extends PacketHandler {
     public HandshakePacketHandler() {
@@ -24,6 +26,11 @@ public class HandshakePacketHandler extends PacketHandler {
         String serverAddress = packet.GetFieldString();
         int serverPort = packet.GetFieldUnsignedShort();
         socket.SetState(ClientState.fromInteger(packet.GetFieldVarInt()));
+        if (socket.GetState() == ClientState.LOGIN) {
+            InboundPacketDecoder loginPacket = new InboundPacketDecoder(packet.PacketData());
+            HandlerRegistry.runHandler(loginPacket.PacketID(), socket, loginPacket);
+            return;
+        }
         InboundPacketDecoder leftOverPacket = new InboundPacketDecoder(packet.PacketData());
         HandlerRegistry.runHandler(leftOverPacket.PacketID(), socket, leftOverPacket);
     }
