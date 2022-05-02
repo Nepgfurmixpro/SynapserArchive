@@ -1,6 +1,8 @@
 package com.neothedeveloper.synapser;
 
 import com.neothedeveloper.synapser.exceptions.PropertyException;
+import com.neothedeveloper.synapser.minecraft.datatypes.Component;
+import com.neothedeveloper.synapser.minecraft.datatypes.ComponentValue;
 import com.neothedeveloper.synapser.server.SynapserServer;
 import com.neothedeveloper.synapser.datatypes.LogType;
 import com.neothedeveloper.synapser.utils.Logger;
