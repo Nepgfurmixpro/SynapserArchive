@@ -1,4 +1,4 @@
-package com.neothedeveloper.synapser.minecraft.entity.datatypes;
+package com.neothedeveloper.synapser.minecraft.datatypes;
 
 public enum ItemProtocolID {
     AIR,
