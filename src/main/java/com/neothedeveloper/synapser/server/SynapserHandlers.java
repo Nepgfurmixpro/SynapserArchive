@@ -13,7 +13,6 @@ public class SynapserHandlers {
     public static final PacketHandler ENCRYPTION_PACKET_HANDLER = new EncryptionPacketHandler();
     public static final PacketHandler LOGIN_PLUGIN_PACKET_HANDLER = new LoginPluginPacketHandler();
     public static final PacketHandler LOGIN_START_PACKET_HANDLER = new LoginStartPacketHandler();
-    public static final PacketHandler LOGIN_SUCCESS_PACKET_HANDLER = new LoginSuccessPacketHandler();
     public static void registerAll() {
         HandlerRegistry.register(0x00, HANDSHAKE_PACKET_HANDLER);
         HandlerRegistry.register(0x00, SLP_PACKET_HANDLER);
@@ -22,7 +21,6 @@ public class SynapserHandlers {
         HandlerRegistry.register(0x01, PING_PONG_HANDLER);
         HandlerRegistry.register(0x01, ENCRYPTION_PACKET_HANDLER);
         HandlerRegistry.register(0x00, LOGIN_START_PACKET_HANDLER);
-        HandlerRegistry.register(0x04, LOGIN_PLUGIN_PACKET_HANDLER);
-        HandlerRegistry.register(0x02, LOGIN_SUCCESS_PACKET_HANDLER);
+        HandlerRegistry.register(0x02, LOGIN_PLUGIN_PACKET_HANDLER);
     }
 }

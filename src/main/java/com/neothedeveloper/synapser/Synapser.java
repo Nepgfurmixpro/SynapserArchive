@@ -15,7 +15,7 @@ public class Synapser {
         new Synapser().Start();
     }
     public static Properties SERVER_PROPERTIES;
-    public static String SERVER_NAME = "Synapser";
+    public static final String SERVER_NAME = "Synapser";
     SynapserServer m_server;
     public void Start() throws PropertyException {
         SERVER_PROPERTIES = new Properties();
@@ -28,6 +28,7 @@ public class Synapser {
                 output += "server-port=25565\n";
                 output += "motd=A Synapser Minecraft Server\n";
                 output += "max-players=20\n";
+                output += "default-disconnect-msg=Disconnected\n";
                 writer.write(output);
                 writer.close();
             }
@@ -44,6 +45,8 @@ public class Synapser {
             throw new PropertyException("server-port is invalid");
         if (!(Integer.parseInt(SERVER_PROPERTIES.GetProperty("max-players")) < Integer.MAX_VALUE))
             throw new PropertyException("max-players is invalid");
+        if (SERVER_PROPERTIES.GetProperty("default-disconnect-msg") == null || SERVER_PROPERTIES.GetProperty("default-disconnect-msg").length() == 0)
+            SERVER_PROPERTIES.SetProperty("default-disconnect-msg", "Disconnected");
 
         Latte.synapser().generateKeys();
         this.m_server = new SynapserServer(ip, SERVER_PROPERTIES.GetProperty("server-port"));

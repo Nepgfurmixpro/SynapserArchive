@@ -55,11 +55,16 @@ public class InboundPacketDecoder {
         removeUsedBits(2);
         return Short.toUnsignedInt(out);
     }
+    public boolean GetFieldBoolean() {
+        boolean out;
+        out = this.m_data[0] != 0;
+        removeUsedBits(1);
+        return out;
+    }
     public UUID GetFieldUUID() {
         long high = GetFieldLong();
         long low = GetFieldLong();
-        UUID uuid = new UUID(high, low);
-        return uuid;
+        return new UUID(high, low);
     }
     public byte[] GetFieldByteArray(int length) {
         byte[] bytes = new byte[length];

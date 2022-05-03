@@ -1,15 +1,16 @@
 package com.neothedeveloper.synapser.builders;
 
-import com.neothedeveloper.synapser.datatypes.LogType;
+import com.google.gson.JsonObject;
 import com.neothedeveloper.synapser.datatypes.VarIntLong;
-import com.neothedeveloper.synapser.utils.Logger;
 import com.neothedeveloper.synapser.utils.LongUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@SuppressWarnings("UnusedReturnValue")
 public class OutboundPacketBuilder {
     private final List<Byte> m_data;
     private final byte m_packetID;
@@ -35,7 +36,15 @@ public class OutboundPacketBuilder {
     public OutboundPacketBuilder AddVarIntField(int fieldData) {
         return AddField(VarIntLong.CreateVarInt(fieldData));
     }
-
+    public OutboundPacketBuilder AddChatField(JsonObject fieldData) {
+        return AddStringField(fieldData.toString());
+    }
+    public OutboundPacketBuilder AddUUIDField(UUID fieldData) {
+        return AddField(LongUtils.GetBytesFromLong(fieldData.getMostSignificantBits())).AddField(LongUtils.GetBytesFromLong(fieldData.getLeastSignificantBits()));
+    }
+    public OutboundPacketBuilder AddIntField(int fieldData) {
+        return AddField(ByteBuffer.allocate(4).putInt(fieldData).array());
+    }
     public byte[] Build() {
         List<Byte> output = new ArrayList<>();
         for (byte b : VarIntLong.CreateVarInt(m_data.size() + 1)) {

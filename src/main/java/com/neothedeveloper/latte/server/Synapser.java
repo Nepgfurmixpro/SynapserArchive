@@ -1,4 +1,4 @@
-package com.neothedeveloper.latte;
+package com.neothedeveloper.latte.server;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;

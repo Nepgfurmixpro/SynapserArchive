@@ -3,7 +3,9 @@ package com.neothedeveloper.latte;
 // Latte is the thing that stores things such as online players, entities, etc.
 // The public and private key for the server is in here
 
-import java.security.*;
+import com.neothedeveloper.latte.server.Protocol;
+import com.neothedeveloper.latte.server.Server;
+import com.neothedeveloper.latte.server.Synapser;
 
 public class Latte {
     protected static final Server m_server = new Server();

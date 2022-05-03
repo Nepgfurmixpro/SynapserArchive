@@ -1,37 +1,50 @@
 package com.neothedeveloper.synapser.handlers;
 
 import com.google.gson.JsonObject;
+import com.neothedeveloper.latte.Latte;
 import com.neothedeveloper.synapser.Synapser;
-import com.neothedeveloper.synapser.builders.OutboundPacketBuilder;
 import com.neothedeveloper.synapser.datatypes.ClientState;
 import com.neothedeveloper.synapser.datatypes.LogType;
-import com.neothedeveloper.synapser.datatypes.VarIntLong;
 import com.neothedeveloper.synapser.decoders.InboundPacketDecoder;
-import com.neothedeveloper.synapser.outbound.LoginPacket;
+import com.neothedeveloper.synapser.minecraft.utils.ChatParser;
 import com.neothedeveloper.synapser.server.HandlerRegistry;
 import com.neothedeveloper.synapser.server.PlayerSocket;
-import com.neothedeveloper.synapser.utils.ByteManipulation;
 import com.neothedeveloper.synapser.utils.Logger;
-
-import java.util.Arrays;
-import java.util.logging.Handler;
 
 public class HandshakePacketHandler extends PacketHandler {
     public HandshakePacketHandler() {
         super(ClientState.HANDSHAKING);
     }
+    private JsonObject parseInvalidVersionText(String string) {
+        return ChatParser.ParseString(string.replace("{version}", Latte.server().minecraftVersion()));
+    }
     @Override
     public void handle(PlayerSocket socket, InboundPacketDecoder packet) {
-        int protocolVersion = packet.GetFieldVarInt();
-        String serverAddress = packet.GetFieldString();
-        int serverPort = packet.GetFieldUnsignedShort();
+        socket.SetProtocolVersion(packet.GetFieldVarInt());
+        packet.GetFieldString();
+        packet.GetFieldUnsignedShort();
         socket.SetState(ClientState.fromInteger(packet.GetFieldVarInt()));
         if (socket.GetState() == ClientState.LOGIN) {
-            InboundPacketDecoder loginPacket = new InboundPacketDecoder(packet.PacketData());
-            HandlerRegistry.runHandler(loginPacket.PacketID(), socket, loginPacket);
-            return;
+            if (socket.GetProtocolVersion() < Latte.server().protocolVersion()) {
+                String msg = "Outdated client! I'm running {version}!";
+                if (Synapser.SERVER_PROPERTIES.GetProperty("outdated-client-msg") != null) {
+                    msg = Synapser.SERVER_PROPERTIES.GetProperty("outdated-client-msg");
+                }
+                socket.Close(parseInvalidVersionText(msg));
+                return;
+            }
+            if (socket.GetProtocolVersion() > Latte.server().protocolVersion()) {
+                String msg = "Outdated client! I'm still using {version}!";
+                if (Synapser.SERVER_PROPERTIES.GetProperty("outdated-server-msg") != null) {
+                    msg = Synapser.SERVER_PROPERTIES.GetProperty("outdated-server-msg");
+                }
+                socket.Close(parseInvalidVersionText(msg));
+                return;
+            }
         }
-        InboundPacketDecoder leftOverPacket = new InboundPacketDecoder(packet.PacketData());
-        HandlerRegistry.runHandler(leftOverPacket.PacketID(), socket, leftOverPacket);
+        if (packet.PacketData().length > 0) {
+            InboundPacketDecoder leftOverPacket = new InboundPacketDecoder(packet.PacketData());
+            HandlerRegistry.runHandler(leftOverPacket.PacketID(), socket, leftOverPacket);
+        }
     }
 }

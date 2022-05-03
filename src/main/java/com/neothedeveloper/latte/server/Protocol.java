@@ -1,4 +1,4 @@
-package com.neothedeveloper.synapser.server;
+package com.neothedeveloper.latte.server;
 
 public class Protocol {
     public static final int VERSION = 758;

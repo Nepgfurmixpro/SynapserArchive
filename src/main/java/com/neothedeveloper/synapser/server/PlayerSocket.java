@@ -1,8 +1,13 @@
 package com.neothedeveloper.synapser.server;
 
+import com.google.gson.JsonObject;
 import com.neothedeveloper.latte.Latte;
+import com.neothedeveloper.synapser.Synapser;
+import com.neothedeveloper.synapser.builders.OutboundPacketBuilder;
 import com.neothedeveloper.synapser.datatypes.ClientState;
 import com.neothedeveloper.synapser.datatypes.LogType;
+import com.neothedeveloper.synapser.minecraft.datatypes.Texture;
+import com.neothedeveloper.synapser.minecraft.utils.ChatParser;
 import com.neothedeveloper.synapser.utils.Logger;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -17,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.UUID;
 
 public class PlayerSocket {
     private final ChannelHandlerContext m_context;
@@ -24,7 +30,9 @@ public class PlayerSocket {
     private String m_username = "";
     private byte[] m_verifyToken;
     private boolean m_encryptionEnabled = false;
-    private String m_hash = "";
+    private UUID m_uuid;
+    private Texture m_textureData;
+    private int m_protocolVersion;
 
     public PlayerSocket(ChannelHandlerContext context) {
         this.m_context = context;
@@ -46,20 +54,13 @@ public class PlayerSocket {
     }
     public void SetUsername(String username) { this.m_username = username; }
     public String GetUsername() { return this.m_username; }
-    public void GenerateHash(String secret) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
-            md.update(secret.getBytes(StandardCharsets.UTF_8));
-            md.update(Latte.synapser().getPublicKey().getEncoded());
-            StringBuilder sb = new StringBuilder();
-            for (byte b : md.digest()) {
-                sb.append(String.format("%02x", b));
-            }
-            m_hash = sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
+    public UUID GetUUID() { return this.m_uuid; }
+    public void SetUUID(UUID uuid) { m_uuid = uuid; }
+    public void SetTexture(Texture texture) { m_textureData = texture; }
+    public Texture GetTexture() { return m_textureData; }
+    public void SetProtocolVersion(int version) { m_protocolVersion = version; }
+    public int GetProtocolVersion() { return m_protocolVersion; }
+
     public int GetMessageId() {
         int id = 0;
         for (byte b : m_verifyToken) {
@@ -82,7 +83,15 @@ public class PlayerSocket {
         return this.m_context.channel().isOpen();
     }
 
+    public void Close(JsonObject reason) {
+        if (this.GetState() == ClientState.LOGIN) Write(new OutboundPacketBuilder(0x00).AddChatField(reason).Build());
+        if (this.GetState() == ClientState.PLAY) Write(new OutboundPacketBuilder(0x1A).AddChatField(reason).Build());
+        this.m_context.close();
+    }
     public void Close() {
+        JsonObject reason = ChatParser.ParseString(Synapser.SERVER_PROPERTIES.GetProperty("default-disconnect-msg"));
+        if (this.GetState() == ClientState.LOGIN) Write(new OutboundPacketBuilder(0x00).AddChatField(reason).Build());
+        if (this.GetState() == ClientState.PLAY) Write(new OutboundPacketBuilder(0x1A).AddChatField(reason).Build());
         this.m_context.close();
     }
 }

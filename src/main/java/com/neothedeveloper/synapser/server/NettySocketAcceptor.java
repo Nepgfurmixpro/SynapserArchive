@@ -35,10 +35,6 @@ public class NettySocketAcceptor extends ChannelHandlerAdapter {
                 bytes[i] = packet.get(i);
             }
             if (0 < bytes.length) {
-//                if (m_playerSocket.IsEncryptionEnabled()) {
-//                    bytes = Latte.synapser().decryptWithPrivate(bytes);
-//                    Logger.Log(LogType.PACKET_EVENT, Arrays.toString(bytes));
-//                }
                 Logger.Log(LogType.PACKET_EVENT, ByteManipulation.GetByteString(bytes));
                 InboundPacketDecoder packetDecoder = new InboundPacketDecoder(bytes);
                 Logger.Log(LogType.PACKET_EVENT, String.format("PacketID: %d; Packet Length: %d; Status: %s", packetDecoder.PacketID(), packetDecoder.PacketLength(), m_playerSocket.GetState()));

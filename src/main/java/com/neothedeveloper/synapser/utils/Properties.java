@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Properties {
-    private HashMap<String, String> m_properties;
+    private final HashMap<String, String> m_properties;
     public Properties() {
         this.m_properties = new HashMap<>();
     }
@@ -21,6 +21,7 @@ public class Properties {
     public String GetProperty(String name) {
         return m_properties.get(name);
     }
+    public void SetProperty(String name, String value) { m_properties.put(name, value); }
 
     public String[] GetAllProperties() {
         return m_properties.values().toArray(new String[0]);

@@ -7,4 +7,5 @@ public enum LogType {
     EVENT,
     VERBOSE,
     PACKET_EVENT,
+    USER_AUTHENTICATOR
 }

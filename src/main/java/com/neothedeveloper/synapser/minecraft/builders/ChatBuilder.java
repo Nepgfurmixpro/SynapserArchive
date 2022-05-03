@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.neothedeveloper.synapser.minecraft.datatypes.Color;
 import com.neothedeveloper.synapser.minecraft.datatypes.Component;
 
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public class ChatBuilder {
     protected boolean m_isBold = false;
     protected boolean m_isItalic = false;

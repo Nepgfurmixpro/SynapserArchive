@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MultiMap<T, K> {
-    List<T> m_keys;
-    List<K> m_values;
+    private final List<T> m_keys;
+    private final List<K> m_values;
     public MultiMap() {
         this.m_keys = new ArrayList<>();
         this.m_values = new ArrayList<>();

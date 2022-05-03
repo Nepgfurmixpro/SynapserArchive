@@ -1,5 +1,6 @@
 package com.neothedeveloper.synapser.minecraft.datatypes;
 
+@SuppressWarnings("unused")
 public enum Component {
     text,
     bold,
@@ -10,7 +11,9 @@ public enum Component {
     font,
     reset,
     color;
-
+    public static boolean IsValidComponent(char c) {
+        return String.valueOf(c).matches("[0123456789abcdefklmnor]");
+    }
     public static Component DetermineComponent(char c) {
         if (String.valueOf(c).matches("[klmnor]")) {
             switch (c) {

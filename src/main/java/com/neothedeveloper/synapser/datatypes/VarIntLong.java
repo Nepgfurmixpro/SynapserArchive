@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VarIntLong {
-//    public static byte[] CreateSignedVarLong(long value) {
-//        return CreateUnsignedVarLong((value << 1) ^ (value >> 63));
-//    }
     public static byte[] CreateVarLong(long value) {
         List<Byte> bytes = new ArrayList<>();
         int i = 0;
@@ -22,9 +19,6 @@ public class VarIntLong {
         }
         return out;
     }
-//    public static byte[] CreateSignedVarInt(int value) {
-//        return Create((value << 1) ^ (value >> 31));
-//    }
     public static byte[] CreateVarInt(int value) {
         byte[] bytes = new byte[10];
         int i = 0;
@@ -39,15 +33,6 @@ public class VarIntLong {
         }
         return out;
     }
-//    public static int ReadSignedVarInt(byte b) {
-//        return ReadSignedVarInt(new byte[]{b});
-//    }
-//    public static int ReadSignedVarInt(byte[] bytes) {
-//        int raw = ReadUnsignedVarInt(bytes);
-//        int temp = (((raw << 31) >> 31) ^ raw) >> 1;
-//        return temp ^ (raw & (1 << 31));
-//    }
-
     public static int ReadVarInt(byte[] bytes) {
         int value = 0;
         int i = 0;

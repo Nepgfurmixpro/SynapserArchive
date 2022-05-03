@@ -10,19 +10,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatParser {
-    public static JsonObject ParseWithCodeChar(char codeChar, String msg) {
+    public static JsonObject ParseString(String msg) {
+        return ParseWithCodeChar('&', msg, true);
+    }
+    public static JsonObject ParseWithCodeChar(char codeChar, String msg, boolean allowNewlines) {
         String[] strings;
         strings = msg.split(String.format("((%s([abcdefklmnor]|[0-9]))+)", codeChar));
         List<ChatBuilder> builders = new ArrayList<>();
         for (String string : strings) {
-            builders.add(new ChatBuilder().setText(string.replace("\\n", "\n")));
+            builders.add(new ChatBuilder().setText(allowNewlines ? string.replace("\\n", "\n") : string));
         }
         boolean onCodeChar = false;
         boolean onString = false;
         int stringI = 0;
         for (int i = 0; i < msg.length(); i++) {
             char c = msg.charAt(i);
-            if (c == codeChar) {
+            if (c == codeChar && Component.IsValidComponent(msg.charAt(i + 1))) {
                 if (onString && !onCodeChar) {
                     stringI++;
                 }
