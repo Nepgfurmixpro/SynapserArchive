@@ -1,6 +1,7 @@
 package com.neothedeveloper.synapser.outbound;
 
 import com.neothedeveloper.synapser.builders.OutboundPacketBuilder;
+import com.neothedeveloper.synapser.datatypes.ClientState;
 import com.neothedeveloper.synapser.datatypes.LogType;
 import com.neothedeveloper.synapser.server.PlayerSocket;
 import com.neothedeveloper.synapser.utils.Logger;
@@ -13,6 +14,7 @@ public class LoginSuccessPacket {
         builder.AddUUIDField(socket.GetUUID());
         builder.AddStringField(socket.GetUsername());
         socket.Write(builder.Build());
-        Logger.Log(LogType.DEBUG, "Sent out Login Success packet");
+        socket.SetState(ClientState.PLAY);
+        JoinGamePacket.send(socket);
     }
 }

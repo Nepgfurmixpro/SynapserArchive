@@ -1,6 +1,7 @@
 package com.neothedeveloper.synapser;
 
 import com.neothedeveloper.latte.Latte;
+import com.neothedeveloper.latte.server.Server;
 import com.neothedeveloper.synapser.exceptions.PropertyException;
 import com.neothedeveloper.synapser.minecraft.utils.ChatParser;
 import com.neothedeveloper.synapser.server.SynapserServer;
@@ -47,6 +48,8 @@ public class Synapser {
             throw new PropertyException("max-players is invalid");
         if (SERVER_PROPERTIES.GetProperty("default-disconnect-msg") == null || SERVER_PROPERTIES.GetProperty("default-disconnect-msg").length() == 0)
             SERVER_PROPERTIES.SetProperty("default-disconnect-msg", "Disconnected");
+        if (SERVER_PROPERTIES.GetProperty("hardcode") == null | !SERVER_PROPERTIES.GetProperty("hardcode").matches("(true|false)"))
+            SERVER_PROPERTIES.SetProperty("hardcode", "false");
 
         Latte.synapser().generateKeys();
         this.m_server = new SynapserServer(ip, SERVER_PROPERTIES.GetProperty("server-port"));

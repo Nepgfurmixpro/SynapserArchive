@@ -19,9 +19,13 @@ public class OutboundPacketBuilder {
         this.m_packetID = (byte)packetID;
         this.m_data = new ArrayList<>();
     }
+    public OutboundPacketBuilder AddField(byte fieldData) {
+        this.m_data.add(fieldData);
+        return this;
+    }
     public OutboundPacketBuilder AddField(byte[] fieldData) {
-        for (byte bit : fieldData) {
-            this.m_data.add(bit);
+        for (byte b : fieldData) {
+            this.m_data.add(b);
         }
         return this;
     }
@@ -44,6 +48,9 @@ public class OutboundPacketBuilder {
     }
     public OutboundPacketBuilder AddIntField(int fieldData) {
         return AddField(ByteBuffer.allocate(4).putInt(fieldData).array());
+    }
+    public OutboundPacketBuilder AddBooleanField(boolean fieldData) {
+        return AddField((byte) (fieldData ? 0x01 : 0x00));
     }
     public byte[] Build() {
         List<Byte> output = new ArrayList<>();
