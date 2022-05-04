@@ -1,10 +1,9 @@
 package com.neothedeveloper.synapser.server;
 
 import com.neothedeveloper.synapser.datatypes.LogType;
+import com.neothedeveloper.synapser.server.initializers.PacketInitializer;
 import com.neothedeveloper.synapser.utils.Logger;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.ByteBufOutputStream;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -12,15 +11,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.bytes.ByteArrayDecoder;
-import io.netty.handler.codec.bytes.ByteArrayEncoder;
-
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SynapserServer {
     private final EventLoopGroup m_serverBossGroup;
@@ -33,7 +23,7 @@ public class SynapserServer {
         this.m_serverBossGroup = new NioEventLoopGroup();
         this.m_serverWorkerGroup = new NioEventLoopGroup();
         Logger.Log(LogType.LOG, String.format("Starting server on %s:%s", ip, port));
-        SynapserHandlers.registerAll();
+        PacketInitializer.initialize();
     }
 
     public void run() throws Exception {

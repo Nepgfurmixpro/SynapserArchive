@@ -3,6 +3,7 @@ package com.neothedeveloper.latte;
 // Latte is the thing that stores things such as online players, entities, etc.
 // The public and private key for the server is in here
 
+import com.neothedeveloper.latte.registries.DimensionRegistry;
 import com.neothedeveloper.latte.server.Protocol;
 import com.neothedeveloper.latte.server.Server;
 import com.neothedeveloper.latte.server.Synapser;
@@ -16,4 +17,6 @@ public class Latte {
     public static Synapser synapser() {
         return m_synapser;
     }
+
+    public static DimensionRegistry DIMENSION_REGISTRY = new DimensionRegistry();
 }
