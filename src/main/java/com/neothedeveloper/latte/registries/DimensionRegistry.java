@@ -7,17 +7,24 @@ public class DimensionRegistry {
     protected JsonObject registry;
     protected JsonArray dimensionEntries;
     protected JsonArray biomeEntires;
+    protected JsonArray identifiers;
     public DimensionRegistry() {
         this.registry = new JsonObject();
         this.dimensionEntries = new JsonArray();
         this.biomeEntires = new JsonArray();
+        this.identifiers = new JsonArray();
     }
 
     public void registerDimension(JsonObject dimension) {
         this.dimensionEntries.add(dimension);
+        this.identifiers.add(dimension.get("name"));
     }
     public void registerBiome(JsonObject biome) {
         this.biomeEntires.add(biome);
+    }
+
+    public JsonArray getIdentifiers() {
+        return identifiers;
     }
 
     public JsonObject finish() {

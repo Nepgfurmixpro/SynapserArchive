@@ -3,7 +3,6 @@ package com.neothedeveloper.synapser.handlers;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.neothedeveloper.latte.Latte;
-import com.neothedeveloper.synapser.Synapser;
 import com.neothedeveloper.synapser.builders.OutboundPacketBuilder;
 import com.neothedeveloper.synapser.datatypes.ClientState;
 import com.neothedeveloper.synapser.datatypes.LogType;
@@ -14,9 +13,7 @@ import com.neothedeveloper.synapser.minecraft.utils.SHA1;
 import com.neothedeveloper.synapser.outbound.LoginPluginPacket;
 import com.neothedeveloper.synapser.outbound.LoginSuccessPacket;
 import com.neothedeveloper.synapser.server.PlayerSocket;
-import com.neothedeveloper.synapser.utils.ByteManipulation;
 import com.neothedeveloper.synapser.utils.Logger;
-import com.neothedeveloper.synapser.utils.LongUtils;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -50,7 +47,7 @@ public class EncryptionPacketHandler extends PacketHandler {
         }
 
 
-        byte[] serverIdHash = SHA1.generateSHA1(baos.toByteArray());
+        byte[] serverIdHash = SHA1.generate(baos.toByteArray());
 
         byte[] decryptedVerifyToken = Latte.synapser().decryptWithPrivate(verifyToken);
         if (!socket.checkVerifyToken(decryptedVerifyToken))
@@ -82,6 +79,7 @@ public class EncryptionPacketHandler extends PacketHandler {
             socket.SetTexture(new Texture(property0.get("value").getAsString(), property0.get("signature").getAsString()));
             Logger.Log(LogType.USER_AUTHENTICATOR, String.format("UUID of player %s is %s", socket.GetUsername(), socket.GetUUID().toString()));
             LoginSuccessPacket.send(socket);
+            LoginPluginPacket.send(socket);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -15,6 +15,7 @@ public class LoginSuccessPacket {
         builder.AddStringField(socket.GetUsername());
         socket.Write(builder.Build());
         socket.SetState(ClientState.PLAY);
+        SetCompressionPacket.send(socket);
         JoinGamePacket.send(socket);
     }
 }

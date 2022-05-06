@@ -3,6 +3,7 @@ package com.neothedeveloper.synapser.handlers;
 import com.neothedeveloper.synapser.datatypes.ClientState;
 import com.neothedeveloper.synapser.datatypes.LogType;
 import com.neothedeveloper.synapser.decoders.InboundPacketDecoder;
+import com.neothedeveloper.synapser.outbound.JoinGamePacket;
 import com.neothedeveloper.synapser.server.PlayerSocket;
 import com.neothedeveloper.synapser.utils.ByteManipulation;
 import com.neothedeveloper.synapser.utils.Logger;
