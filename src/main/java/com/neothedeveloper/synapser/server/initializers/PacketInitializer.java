@@ -10,7 +10,6 @@ public class PacketInitializer {
     public static final PacketHandler HANDSHAKE_FAILURE_PACKET = new HandshakeFailurePacket();
     public static final PacketHandler PING_PONG_HANDLER = new PingPacketHandler();
     public static final PacketHandler ENCRYPTION_PACKET_HANDLER = new EncryptionPacketHandler();
-    public static final PacketHandler LOGIN_PLUGIN_PACKET_HANDLER = new LoginPluginPacketHandler();
     public static final PacketHandler LOGIN_START_PACKET_HANDLER = new LoginStartPacketHandler();
     public static void initialize() {
         HandlerRegistry.register(0x00, HANDSHAKE_PACKET_HANDLER);
@@ -20,6 +19,5 @@ public class PacketInitializer {
         HandlerRegistry.register(0x01, PING_PONG_HANDLER);
         HandlerRegistry.register(0x01, ENCRYPTION_PACKET_HANDLER);
         HandlerRegistry.register(0x00, LOGIN_START_PACKET_HANDLER);
-        HandlerRegistry.register(0x02, LOGIN_PLUGIN_PACKET_HANDLER);
     }
 }

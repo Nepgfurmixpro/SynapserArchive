@@ -10,7 +10,6 @@ import com.neothedeveloper.synapser.decoders.InboundPacketDecoder;
 import com.neothedeveloper.synapser.minecraft.datatypes.Texture;
 import com.neothedeveloper.synapser.minecraft.utils.ChatParser;
 import com.neothedeveloper.synapser.minecraft.utils.SHA1;
-import com.neothedeveloper.synapser.outbound.LoginPluginPacket;
 import com.neothedeveloper.synapser.outbound.LoginSuccessPacket;
 import com.neothedeveloper.synapser.server.PlayerSocket;
 import com.neothedeveloper.synapser.utils.Logger;
@@ -79,7 +78,6 @@ public class EncryptionPacketHandler extends PacketHandler {
             socket.SetTexture(new Texture(property0.get("value").getAsString(), property0.get("signature").getAsString()));
             Logger.Log(LogType.USER_AUTHENTICATOR, String.format("UUID of player %s is %s", socket.GetUsername(), socket.GetUUID().toString()));
             LoginSuccessPacket.send(socket);
-            LoginPluginPacket.send(socket);
         } catch (IOException e) {
             e.printStackTrace();
         }

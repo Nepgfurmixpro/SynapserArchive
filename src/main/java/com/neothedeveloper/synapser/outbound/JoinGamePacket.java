@@ -15,6 +15,7 @@ import dev.dewy.nbt.Nbt;
 import io.netty.buffer.ByteBuf;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class JoinGamePacket {
@@ -41,5 +42,6 @@ public class JoinGamePacket {
         builder.AddBooleanField(true);
         builder.AddBooleanField(true);
         socket.Write(builder.Build());
+        PluginMessagePacket.send(socket, "minecraft:brand", Latte.clientBrandRetriever().brandName().getBytes(StandardCharsets.UTF_8));
     }
 }

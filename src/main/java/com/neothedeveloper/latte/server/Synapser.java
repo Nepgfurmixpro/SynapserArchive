@@ -13,7 +13,7 @@ public class Synapser {
     protected Cipher m_encrypter = null;
     public void generateKeys() {
         if (m_privKey != null || m_pubKey != null) return;
-        KeyPairGenerator gen = null;
+        KeyPairGenerator gen;
         try {
             gen = KeyPairGenerator.getInstance("RSA");
             gen.initialize(1024);
