@@ -5,9 +5,12 @@ import com.neothedeveloper.synapser.minecraft.dimension.Dimension;
 import com.neothedeveloper.synapser.minecraft.dimension.DimensionBuilder;
 
 public class Overworld extends Dimension {
+    public Overworld() {
+        super("minecraft:overworld");
+    }
     @Override
     public JsonObject create() {
-        DimensionBuilder builder = new DimensionBuilder("minecraft:overworld", 0);
+        DimensionBuilder builder = new DimensionBuilder(this.getName(), 0);
         builder.ambientLight(0.0f)
                 .doBedsWork(true)
                 .setCoordinateScale(1.0)

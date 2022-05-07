@@ -6,8 +6,10 @@ import com.neothedeveloper.synapser.Synapser;
 import com.neothedeveloper.synapser.builders.OutboundPacketBuilder;
 import com.neothedeveloper.synapser.datatypes.ClientState;
 import com.neothedeveloper.synapser.datatypes.LogType;
+import com.neothedeveloper.synapser.decoders.InboundPacketDecoder;
 import com.neothedeveloper.synapser.minecraft.datatypes.Texture;
 import com.neothedeveloper.synapser.minecraft.utils.ChatParser;
+import com.neothedeveloper.synapser.utils.ByteManipulation;
 import com.neothedeveloper.synapser.utils.Logger;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -42,6 +44,9 @@ public class PlayerSocket {
     ByteBuf out;
     public void Write(byte[] bytes) {
         out = ByteBufAllocator.DEFAULT.buffer();
+        Logger.Log(LogType.PACKET_EVENT, ByteManipulation.GetByteString(bytes));
+        InboundPacketDecoder packetDecoder = new InboundPacketDecoder(bytes);
+        Logger.Log(LogType.PACKET_EVENT, String.format("OUT: PacketID: %s; Packet Length: %d; Status: %s", ByteManipulation.GetByteString(new byte[]{(byte)packetDecoder.PacketID()}), packetDecoder.PacketLength(), this.GetState()));
         out.writeBytes(bytes);
         this.m_context.writeAndFlush(out);
     }

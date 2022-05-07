@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.neothedeveloper.latte.Latte;
 import com.neothedeveloper.synapser.Synapser;
 import com.neothedeveloper.synapser.builders.OutboundPacketBuilder;
+import com.neothedeveloper.synapser.builders.PluginMessageBuilder;
 import com.neothedeveloper.synapser.minecraft.datatypes.Gamemode;
 import com.neothedeveloper.synapser.minecraft.dimension.dimensions.Overworld;
 import com.neothedeveloper.synapser.minecraft.utils.SHA256;
@@ -32,7 +33,7 @@ public class JoinGamePacket {
         builder.AddField((byte) -1);
         builder.AddStringField(Latte.DIMENSION_REGISTRY.getIdentifiers().toString());
         builder.AddStringField(Latte.DIMENSION_REGISTRY.finish().toString());
-        builder.AddStringField(DimensionInitializer.OVERWORLD.toString());
+        builder.AddStringField(DimensionInitializer.OVERWORLD.getName());
         builder.AddVarIntField(Integer.parseInt(Synapser.SERVER_PROPERTIES.GetProperty("max-players")));
         builder.AddLongField(getSeedLong(24578764247522L));
         builder.AddVarIntField(12);
@@ -42,6 +43,6 @@ public class JoinGamePacket {
         builder.AddBooleanField(true);
         builder.AddBooleanField(true);
         socket.Write(builder.Build());
-        PluginMessagePacket.send(socket, "minecraft:brand", Latte.clientBrandRetriever().brandName().getBytes(StandardCharsets.UTF_8));
+        PluginMessagePacket.send(socket, "minecraft:brand", new PluginMessageBuilder().AddStringField("synapser/vanilla").Build());
     }
 }

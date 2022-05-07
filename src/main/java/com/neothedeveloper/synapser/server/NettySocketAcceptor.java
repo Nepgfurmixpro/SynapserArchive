@@ -37,7 +37,7 @@ public class NettySocketAcceptor extends ChannelHandlerAdapter {
             if (0 < bytes.length) {
                 Logger.Log(LogType.PACKET_EVENT, ByteManipulation.GetByteString(bytes));
                 InboundPacketDecoder packetDecoder = new InboundPacketDecoder(bytes);
-                Logger.Log(LogType.PACKET_EVENT, String.format("PacketID: %d; Packet Length: %d; Status: %s", packetDecoder.PacketID(), packetDecoder.PacketLength(), m_playerSocket.GetState()));
+                Logger.Log(LogType.PACKET_EVENT, String.format("IN: PacketID: %d; Packet Length: %d; Status: %s", packetDecoder.PacketID(), packetDecoder.PacketLength(), m_playerSocket.GetState()));
                 HandlerRegistry.runHandler(packetDecoder.PacketID(), m_playerSocket, packetDecoder);
             }
         } finally {

@@ -50,7 +50,12 @@ public class OutboundPacketBuilder {
         return AddField(ByteBuffer.allocate(4).putInt(fieldData).array());
     }
     public OutboundPacketBuilder AddBooleanField(boolean fieldData) {
-        return AddField((byte) (fieldData ? 0x01 : 0x00));
+        this.m_data.add((byte) (fieldData ? 0x01 : 0x00));
+        return this;
+    }
+
+    public List<Byte> getData() {
+        return m_data;
     }
     public byte[] Build() {
         List<Byte> output = new ArrayList<>();
